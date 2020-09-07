@@ -43,3 +43,13 @@ RUN helm init --client-only --kubeconfig=$HOME/.kube/kubeconfig
 RUN helm version --client
 
 RUN helm plugin install https://github.com/instrumenta/helm-kubeval --debug
+
+COPY ./docker/docker-entrypoint.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+VOLUME /charts
+WORKDIR /charts
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+CMD ["helm --help"]
