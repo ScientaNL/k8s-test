@@ -1,6 +1,7 @@
 FROM garethr/kubeval:latest
 
 ENV HELM_HOME="/root/.helm"
+ENV K8S_VERSION=""
 
 RUN apk --no-cache add \
     bash \
@@ -41,8 +42,16 @@ RUN curl -LO "https://get.helm.sh/helm-$helm_version-linux-amd64.tar.gz" && \
 
 RUN helm init --client-only --kubeconfig=$HOME/.kube/kubeconfig
 RUN helm version --client
-
 RUN helm plugin install https://github.com/instrumenta/helm-kubeval --debug
+
+# Install Kube-score
+ARG kubescore_version=1.8.1
+LABEL kubescore_version=$kubescore_version
+RUN curl -LO "https://github.com/zegl/kube-score/releases/download/v${kubescore_version}/kube-score_${kubescore_version}_linux_amd64.tar.gz" && \
+    mkdir -p "/usr/local/kube-score-${kubescore_version}" && \
+    tar -xzf "kube-score_${kubescore_version}_linux_amd64.tar.gz" -C "/usr/local/kube-score-${kubescore_version}" && \
+    ln -s "/usr/local/helm-$helm_version/kube-score" /usr/local/bin/kube-score && \
+    rm -f "kube-score_${kubescore_version}_linux_amd64.tar.gz"
 
 COPY ./docker/docker-entrypoint.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
@@ -52,4 +61,4 @@ WORKDIR /charts
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-CMD ["helm --help"]
+CMD ["helm kubeval . -v $K8S_VERSION"]
