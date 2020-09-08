@@ -4,11 +4,9 @@ FROM scienta/scienta-helm-versioning:master as scienta-helm-versioning
 # kubeval container is alpine:3.11
 FROM garethr/kubeval:latest
 
+# copy scienta-helm-versioning code
 RUN mkdir /scienta-helm-versioning
-
 COPY --from=scienta-helm-versioning /app /scienta-helm-versioning
-
-RUN ls /scienta-helm-versioning
 
 ENV HELM_HOME="/root/.helm"
 ENV K8S_VERSION=""
@@ -24,8 +22,6 @@ RUN apk --no-cache add \
     python3 \
     && pip3 install --upgrade pip==20.2.2 \
     && pip3 install wheel
-
-RUN php --version
 
 # Install a YAML Linter
 ARG yamllint_version=1.24.2
@@ -69,8 +65,18 @@ RUN curl -LO "https://github.com/zegl/kube-score/releases/download/v${kubescore_
 COPY ./docker/docker-entrypoint.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-VOLUME /charts
-WORKDIR /charts
+#######################################################
+# prepare dirs for scienta-helm-versioning processing #
+#######################################################
+RUN mkdir -m775 /helmfiles
+VOLUME /helmsource
+WORKDIR /helmfiles
+
+ENV SOURCE_ABSPATH=/helmsource
+ENV SCIENTA_VERSION="branch-testing"
+ENV CHART_VERSION="1"
+ENV CHART_SUFFIX="-branch-testing"
+ENV COMMIT_SHA="testing"
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
