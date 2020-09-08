@@ -8,8 +8,8 @@ FROM garethr/kubeval:latest
 RUN mkdir /scienta-helm-versioning
 COPY --from=scienta-helm-versioning /app /scienta-helm-versioning
 
-ENV HELM_HOME="/root/.helm"
-	K8S_VERSION=""
+ENV HELM_HOME="/root/.helm" \
+	K8S_VERSION="" \
 	PS1="\u:\w [\A]> "
 
 RUN apk --no-cache add \
@@ -73,10 +73,10 @@ RUN mkdir -m775 /helmfiles
 VOLUME /helmsource
 WORKDIR /helmfiles
 
-ENV SOURCE_ABSPATH=/helmsource
-	SCIENTA_VERSION="branch-testing"
-	CHART_VERSION="1"
-	CHART_SUFFIX="-branch-testing"
+ENV SOURCE_ABSPATH=/helmsource \
+	SCIENTA_VERSION="branch-testing" \
+	CHART_VERSION="1" \
+	CHART_SUFFIX="-branch-testing" \
 	COMMIT_SHA="testing"
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
