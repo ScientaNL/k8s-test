@@ -75,7 +75,7 @@ WORKDIR /helmfiles
 
 ENV SOURCE_ABSPATH=/helmsource \
 	SCIENTA_VERSION="branch-testing" \
-	CHART_VERSION="1" \
+	CHART_VERSION="1.0.0" \
 	CHART_SUFFIX="-branch-testing" \
 	COMMIT_SHA="testing"
 
