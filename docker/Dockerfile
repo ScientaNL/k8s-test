@@ -1,4 +1,14 @@
+FROM scienta/scienta-helm-versioning:master as scienta-helm-versioning
+# Do nothing, just use php-code, see: https://github.com/ScientaNL/scienta-helm-versioning/blob/master/Dockerfile
+
+# kubeval container is alpine:3.11
 FROM garethr/kubeval:latest
+
+RUN mkdir /scienta-helm-versioning
+
+COPY --from=scienta-helm-versioning /app /scienta-helm-versioning
+
+RUN ls /scienta-helm-versioning
 
 ENV HELM_HOME="/root/.helm"
 ENV K8S_VERSION=""
@@ -9,10 +19,13 @@ RUN apk --no-cache add \
     git \
     libc6-compat \
     openssh-client \
+    php7 \
     py3-pip \
     python3 \
     && pip3 install --upgrade pip==20.2.2 \
     && pip3 install wheel
+
+RUN php --version
 
 # Install a YAML Linter
 ARG yamllint_version=1.24.2
