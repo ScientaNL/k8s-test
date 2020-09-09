@@ -73,8 +73,7 @@ RUN mkdir -m775 /helmfiles
 VOLUME /helmsource
 WORKDIR /helmfiles
 
-COPY ./parse-helm.sh ./parse-helm
-COPY ./parse-helm-template.sh ./parse-helm-template
+COPY ./parse-helm-template.sh /helmfiles/parse-helm-template
 
 ENV SCIENTA_VERSION="branch-dummy" \
 	CHART_VERSION="1.0.0" \
