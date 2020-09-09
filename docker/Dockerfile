@@ -73,11 +73,13 @@ RUN mkdir -m775 /helmfiles
 VOLUME /helmsource
 WORKDIR /helmfiles
 
-ENV SOURCE_ABSPATH=/helmsource \
-	SCIENTA_VERSION="branch-testing" \
+COPY ./parse-helm.sh ./parse-helm
+COPY ./parse-helm-template.sh ./parse-helm-template
+
+ENV SCIENTA_VERSION="branch-dummy" \
 	CHART_VERSION="1.0.0" \
-	CHART_SUFFIX="-branch-testing" \
-	COMMIT_SHA="testing"
+	CHART_SUFFIX="-branch-dummy" \
+	COMMIT_SHA="dummy"
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
