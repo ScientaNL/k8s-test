@@ -27,7 +27,7 @@ is een shell-script: `./parse-helm-template` gemaakt.
 Dit maakt o.a. de volgende commando's beschikbaar vanuit `/helmfiles` (de workdir):
 - `./parse-helm-template` 
     - Parse en run `helm template` (output hemlfiles naar stdout)
-- `./parse-helm-template | kubeval kubeval -v $K8S_VERSION --strict -`
+- `./parse-helm-template | kubeval -v $K8S_VERSION --strict -`
     - Pipe helm-files naar kubeval en test ze
 - `./parse-helm-template -x templates/configmap/nginx.cm.yaml --debug`
     - Parse en output 1 gegenereerde helm-file naar stdout (in debug mode)
