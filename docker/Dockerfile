@@ -74,6 +74,7 @@ VOLUME /helmsource
 WORKDIR /helmfiles
 
 COPY ./parse-helm-template.sh /helmfiles/parse-helm-template
+RUN chmod 775 /helmfiles/parse-helm-template
 
 ENV SCIENTA_VERSION="branch-dummy" \
 	CHART_VERSION="1.0.0" \
